@@ -8,8 +8,8 @@ It heps you find the files you need to edit, in case you want to override defaul
   * _GlobalParameters.sh_
 * _templates/_  # All Global file Templates
   * etc.hosts
-* lib/        # Global Script Libraries
-  * CommonBashFunctions.sh
+* _lib/_        # Global Script Libraries
+  * _CommonBashFunctions.sh_
 * _services/_   # Generic Scripts, Variables & Templates used to install OpenStack Services
   * _keystone/_ # Scripts, Variables & Templates for **Keystone** Identity Service Installation
     * _vars.sh_
@@ -28,10 +28,10 @@ It heps you find the files you need to edit, in case you want to override defaul
       * _configure.network-node.sh_
       * _configure.compute-node.sh_
 * _nodes/_      # Configuration files, Variables, Scripts & Templates to Install & Configure specific Nodes
-  * _control1_
+  * _control1/_
     * _vars.sh_
     * _install.sh_
     * _post-install.sh_
-  * _compute1_
+  * _compute1/_
     * _vars.sh_
     * _install.sh_
