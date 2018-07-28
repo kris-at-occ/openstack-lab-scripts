@@ -3,7 +3,7 @@
 This file describes the Directory Structure used in the COA-Lab Installation Script.
 It heps you find the files you need to edit, in case you want to override defaults.
 
-* _**install_all.sh**_ # Global Installation Script to run the Deployment, must be run from the root directory of cloned repo
+* _**install_node.sh**_ # Node Installation Script, has one argument with Node Label referencing subdirectory of nodes/, must be run from the root directory of cloned repo
 * _**vars/**_       # Here you find all files with Global Variables, like Passwords, Hostnames, IP Addresses
   * _GlobalPasswords.sh_
   * _GlobalParameters.sh_
