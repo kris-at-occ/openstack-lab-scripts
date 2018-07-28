@@ -6,7 +6,7 @@
 #                         otherwise simply returns
 
 function check_variable () {
-  if [ -z "$2" ]
+  if [ -z "${!1}" ]
   then
     echo "$SCRIPT_NAME: Environment Variable $1 cannot be empty! Exiting..."
     exit 1
