@@ -10,7 +10,7 @@ for script in $(find vars/*.sh -maxdepth 0 -type f 2>/dev/null); do
   source $script
 done
 
-for script in $(find lib/*.sh -naxdepth 0 -type f 2>/dev/null); do
+for script in $(find lib/*.sh -maxdepth 0 -type f 2>/dev/null); do
   echo "running source $script"
   source $script
 done
