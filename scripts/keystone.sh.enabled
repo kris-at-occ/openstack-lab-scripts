@@ -1,0 +1,77 @@
+#! /bin/bash
+
+SCRIPT_NAME="scripts/keystone.sh.enabled"
+
+# Kestone Installation Environment Variables should be defined in Global Variables file
+# Values can be overriden below
+
+# Define some utility bash functions
+#
+# check_variable (arg1, arg2) - checks if argument is empty, then prints error message and exits
+
+function check_variable () {
+  if [ -z "$2" ]
+  then
+    echo "$SCRIPT_NAME: Environment Variable $1 cannot be empty! Exiting..."
+    exit 1
+  fi
+}
+
+# KEYSTONE_DBPASS - defines Keystone password in SQL DB
+# KEYSTONE_DBPASS="openstack"
+#
+# KEYSTONE_OSPASS - defines password for OpenStack 'keystone' User
+# KEYSTONE_OSPASS="openstack"
+#
+# DB_HOST - defines hostname or IP address of DB host
+# DB_HOST="controller"
+#
+# KEYSTONE_BOOTSTRAP_PASSWORD - defines Keystone bootstrap password
+# KEYSTONE_BOOTSTRAP_PASSWORD="openstack"
+#
+# KEYSTONE_HOST - defines hostname or IP address of Keystone host
+# KEYSTONE_HOST="controller"
+
+
+# Check Installation Parameters defined as Environment Variables
+
+if [ -z "$KEYSTONE_DB_PASS" ]
+then
+  echo "$SCRIPT_NAME: Environment Variable KEYSTONE_DB_PASS cannot be empty! Exiting..."
+  exit 1
+fi
+
+if [ -z "$KEYSTONE_OS_PASS" ]
+then
+  echo "$SCRIPT_NAME: Environment Variable KEYSTONE_OS_PASS cannot be empty! Exiting..."
+  exit 1
+fi
+
+if [ -z "$DB_HOST" ]
+then
+  echo "$SCRIPT_NAME: Environment Variable DB_HOST cannot be empty! Exiting..."
+  exit 1
+fi
+
+cat <<- EOF | mysql
+CREATE DATABASE keystone;
+GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY "$KEYSTONE_DB_PASS";
+GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY "$KEYSTONE_DB_PASS";
+EXIT;
+EOF
+
+# Install required packages + crudini to edit .conf files
+apt install keystone apache2 libapache2-mod-wsgi crudini -y
+
+# Configure Keystone database access, as set above
+crudini --set /etc/keystone/keystone.conf database connection "mysql+pymysql://keystone:$KEYSTONE_OS_PASS@$DB_HOST/keystone"
+
+# Set Fernet Token Provider
+crudini --set /etc/keystone/keystone.conf token provider fernet
+# Populate Identity Service Database
+su -s /bin/sh -c "keystone-manage db_sync" keystone
+# Initialize Fernet Repositories
+keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+# Bootstrap Identity Service
+keystone-manage bootstrap --bootstrap-password "$KEYSTONE_BOOTSTRAP_PASSWORD" --bootstrap-admin-url "http://$KEYSTONE_HOST:35357/v3/" --bootstrap-internal-url "http://$KEYSTONE_HOST:5000/v3/" --bootstrap-public-url "http://$KEYSTONE_HOST:5000/v3/" --bootstrap-region-id RegionOne
