@@ -6,12 +6,10 @@ SCRIPT_NAME="install_all.sh"
 # Then it runs installation script for each Node defined in nodes/
 
 for script in $(find vars/*.sh -maxdepth 0 -type f 2>/dev/null); do
-  echo "running source $script"
   source $script
 done
 
 for script in $(find lib/*.sh -maxdepth 0 -type f 2>/dev/null); do
-  echo "running source $script"
   source $script
 done
 
