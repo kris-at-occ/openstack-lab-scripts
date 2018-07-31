@@ -12,3 +12,10 @@ function check_variable () {
     exit 1
   fi
 }
+
+# simple_template_with_vars (arg1) - substitue variable names in template file, which name is in arg1
+
+function simple_template_with_vars () {
+  eval "echo \"$(cat $1)\""
+}
+
