@@ -5,6 +5,10 @@
 # Source Variables Definition for Infra Service
 source vars.sh 2>/dev/null
 
-# Source All Subservices of Infra Service
+# Source All Control Node Installation Scripts for Subservices of Infra Service
 
-for i in 
+for script in $(find services/infra/*.d/install.control-node.sh -maxdepth 0 -type f 2>/dev/null); do
+  source $script
+done
+
+# Execute final commands
