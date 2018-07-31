@@ -25,6 +25,3 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
 DEBIAN_FRONTEND=noninteractive add-apt-repository cloud-archive:$OPENSTACK_RELEASE
 DEBIAN_FRONTEND=noninteractive apt-get -y update
 DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-DEBIAN_FRONTEND=noninteractive apt-get -y install python-openstackclient
-
-
