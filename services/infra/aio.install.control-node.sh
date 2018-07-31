@@ -5,10 +5,14 @@
 # Source Variables Definition for Infra Service
 source vars.sh 2>/dev/null
 
+# Check required Parameter Variables
+
+check_variable AIO_SUBSERVICES
+
 # Source All Control Node Installation Scripts for Subservices of Infra Service
 
-for script in $(find services/infra/*.d/install.control-node.sh -maxdepth 0 -type f 2>/dev/null); do
-  source $script
+for subservice in $AIO_SUBSERVICES; do
+  source services/infra/$subservice.d/install.control-node.sh
 done
 
 # Execute final commands
