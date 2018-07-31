@@ -3,7 +3,7 @@
 # This file contains script to Install OpenStack Infrastructure on Control Node
 
 # Source Variables Definition for Infra Service
-source vars.sh 2>/dev/null
+source services/infra/vars.sh 2>/dev/null
 
 # Check required Parameter Variables
 
