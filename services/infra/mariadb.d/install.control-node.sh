@@ -17,14 +17,14 @@ source services/infra/mariadb.d/vars.sh 2>/dev/null
 
 # Install Mariadb Packages for Ubuntu
 DEBIAN_FRONTEND=noninteractive apt-get -y update
-DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb python-pymysql
+DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server python-pymysql
 
 # Check if mangdatory Parameter Variables are set
 
 check_variable CONTROLLER1_HOSTNAME
 check_variable MARIADB_CONF_FILE
 
-MARIADB_SERVER=$CONTROLLER_HOSTNAME; simple_template_with_vars templates/mariadb.aio.conf >> $MARIADB_CONF_FILE
+MARIADB_SERVER=$CONTROLLER1_HOSTNAME; simple_template_with_vars templates/mariadb.aio.conf >> $MARIADB_CONF_FILE
 
 # Restart MariaDB Service
 
